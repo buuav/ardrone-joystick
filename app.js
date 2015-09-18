@@ -24,10 +24,12 @@ joystick.on('data', function(buf) {
         }
     }
     prevButtons = controls.buttons;
-    quad.front((512 - controls.pitch) / 512);
-    quad.left((512 - controls.roll) / 512);
-    quad.counterClockwise((128 - controls.yaw) / 128);
-    quad.up((controls.throttle - 128) / 128);
+    if (controls.buttons[1]) {
+        quad.front((512 - controls.pitch) / 512);
+        quad.left((512 - controls.roll) / 512);
+        quad.counterClockwise((128 - controls.yaw) / 128);
+        quad.up((controls.throttle - 128) / 128);
+    }
     // console.log(JSON.stringify(controls));
 });
 joystick.on('error', function() {
