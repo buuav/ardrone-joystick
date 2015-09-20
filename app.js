@@ -29,7 +29,7 @@ joystick.on('data', function(buf) {
         quad.left((512 - controls.roll) / 512);
         quad.counterClockwise((128 - controls.yaw) / 128);
         quad.up((controls.throttle - 128) / 128);
-    }
+    } else quad.stop();
     // console.log(JSON.stringify(controls));
 });
 joystick.on('error', function() {
