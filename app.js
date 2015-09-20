@@ -4,7 +4,7 @@ var quad = require('ar-drone').createClient(),
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io')(server);
+    dronestream = require('dronestream');
 
 var port = process.env.PORT || 3000;
 
@@ -14,6 +14,9 @@ var joystick = new hid.HID(1133, 49685);
 // console.log(joystick);
 
 // Start server
+dronestream.listen(server, {
+    tcpVideoStream: quad.getVideoStream()
+});
 server.listen(port, function() {
     console.log('Server listening at localhost:%d', port);
 });
@@ -21,12 +24,6 @@ server.listen(port, function() {
 // Routing
 app.use(express.static(__dirname + '/webapp'));
 
-// Attach png stream to socket broadcast
-quad.getPngStream()
-    .on('error', console.log)
-    .on('data', function(pngBuffer) {
-        io.emit('image', pngBuffer);
-    });
 
 // Setup state variables
 var flying = false;

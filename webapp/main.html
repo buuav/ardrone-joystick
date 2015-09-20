@@ -6,27 +6,10 @@
 </head>
 
 <body>
-    <canvas id='canvas' width='1280' height='720'></canvas>
-
-    
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-    var socket = io();
-
-    socket.on('image', function(data) {
-        var blob = new Blob([data], {
-            type: 'image/png'
-        });
-        var url = URL.createObjectURL(blob);
-        var img = new Image;
-
-        img.onload = function() {
-            var ctx = document.getElementById('canvas').getContext('2d');
-            ctx.drawImage(this, 0, 0);
-            URL.revokeObjectURL(url);
-        };
-        img.src = url;
-    });
+    <div class="droneStream"></div>
+    <script src="/dronestream/nodecopter-client.js"></script>
+    <script>
+    new NodecopterStream(document.getElementById('droneStream'));
     </script>
 </body>
 
