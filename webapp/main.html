@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <title>AR Drone camera feed</title>
+</head>
+
+<body>
+    <div id="droneStream" style="width: 640px; height: 360px"> </div>
+    <script src="/dronestream/nodecopter-client.js"></script>
+    <script>
+    	new NodecopterStream(document.getElementById('droneStream'));
+    </script>
+</body>
+
+</html>

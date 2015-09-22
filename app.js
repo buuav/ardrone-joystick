@@ -1,15 +1,38 @@
-var quad = require('ar-drone').createClient();
-var hid = require('node-hid');
+var quad = require('ar-drone').createClient(),
+    hid = require('node-hid');
+
+var express = require('express'),
+    app = express(),
+    server = require('http').createServer(app),
+    dronestream = require('dronestream');
+
+var port = process.env.PORT || 3000;
+
 // console.log(hid.devices());
 // Logitech Extreme 3D Pro's vendorID and productID: 1133:49685 (i.e. 046d:c215)
 var joystick = new hid.HID(1133, 49685);
 // console.log(joystick);
 
+// Start server
+dronestream.listen(server, {
+    tcpVideoStream: quad.getVideoStream()
+});
+server.listen(port, function() {
+    console.log('Server listening at localhost:%d', port);
+});
+
+// Routing
+app.use(express.static(__dirname + '/webapp'));
+
+
+// Setup state variables
 var flying = false;
 var prevButtons;
 
+// Handle navigational data, in this case, print to console
 quad.on('navdata', console.log);
 
+// Attach joystick data to parser and send control signals to quadcopter
 joystick.on('data', function(buf) {
     var controls = parseControls(buf);
     if (!prevButtons)
@@ -36,7 +59,7 @@ joystick.on('error', function() {
     quad.land();
 });
 
-
+// Parser courtesy of 'https://github.com/botonchou/node-Logitech-Extreme-3D-Pro.git'
 function parseControls(buf) {
     var ch = buf.toString('hex').match(/.{1,2}/g).map(function(c) {
         return parseInt(c, 16);

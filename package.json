@@ -5,6 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "ar-drone": "^0.3.3",
+    "dronestream": "^1.1.1",
+    "express": "^4.13.3",
     "node-hid": "^0.4.0"
   },
   "scripts": {
